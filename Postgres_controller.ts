@@ -1,7 +1,7 @@
 import pg from "pg";
 const { Client } = pg;
 import "dotenv/config";
-import { Context } from "koa";
+import { Context, Next } from "koa";
 
 const db = new Client({
   user: process.env.DB_USER,
@@ -19,9 +19,21 @@ class Postgres_controller {
   async get_users(ctx: Context) {
     try {
       console.log("get_users func");
-      const users = await db.query('SELECT * FROM public."Album"');
+      const users = await db.query('SELECT * FROM public."Artist"');
       console.log("users", users.rowCount);
       ctx.body = users.rows;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log("get_users error:", error.message);
+      }
+    }
+  }
+  async get_user(ctx: Context) {
+    try {
+      console.log("get_users func");
+      const user = await db.query('SELECT * FROM public."Artist" WHERE "ArtistId" = $1',[ctx.params.id]);
+      console.log("users", user.rowCount);
+      ctx.body = user.rows;
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.log("get_users error:", error.message);
