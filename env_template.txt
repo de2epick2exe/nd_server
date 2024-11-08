@@ -1,0 +1,5 @@
+DB_NAME = "chinook"
+DB_USER = "postgres"
+DB_PASS = "postgres"
+DB_HOST = 10.0.0.158
+DB_PORT = 5432 
