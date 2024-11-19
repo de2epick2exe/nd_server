@@ -9,3 +9,17 @@ jobs:
     steps:
       - name: Echo Test
         run: echo "Hello, GitHub Actions!"
+
+      - name: Get repository code
+      - uses: actions/checkout@v3
+
+      - name: Set Up NodeJS
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "23"
+        
+      - name: Install dependencies
+        run: npm install
+          
+      - name: Run Tests
+        run: npm test
