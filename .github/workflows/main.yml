@@ -2,6 +2,7 @@ name: tests
 on: 
   push:
     branches: ["test"]
+  workflow_dispatch:
 jobs:
   test:
     runs-on: self-hosted
