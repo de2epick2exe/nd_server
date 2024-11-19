@@ -3,23 +3,39 @@ const { Client } = pg;
 import "dotenv/config";
 import { Context } from "koa";
 
-const db = new Client({
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  database: process.env.DB_NAME,
-  ssl: { rejectUnauthorized: false },
-});
-(async () => {
-  await db.connect();
-})();
-
 class Postgres_controller {
+  private db: pg.Client;
+  private isConnected: boolean = false;
+  constructor() {
+    this.db = new Client({
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      database: process.env.DB_NAME,
+      ssl: { rejectUnauthorized: false },
+    });
+    this.get_artists = this.get_artists.bind(this);
+    this.get_artist = this.get_artist.bind(this);
+    this.delete_artists = this.delete_artists.bind(this);
+  }
+  async connect_db() {
+    if(this.isConnected) return;
+    await this.db.connect();
+    this.isConnected = true;
+    console.log("connected to db");
+  }
+  async disconnect_db() {
+    await this.db.end();
+    this.isConnected = false;
+
+    console.log("disconnected from db");
+  }
+
   async get_artists(ctx: Context) {
     try {
       console.log("get_users func");
-      const users = await db.query('SELECT * FROM public."Artist"');
+      const users = await this.db.query('SELECT * FROM public."Artist"');
       console.log("users", users.rowCount);
       ctx.body = users.rows;
     } catch (error: unknown) {
@@ -31,7 +47,10 @@ class Postgres_controller {
   async get_artist(ctx: Context) {
     try {
       console.log("get_users func");
-      const user = await db.query('SELECT * FROM public."Artist" WHERE "ArtistId" = $1',[ctx.params.id]);
+      const user = await this.db.query(
+        'SELECT * FROM public."Artist" WHERE "ArtistId" = $1',
+        [ctx.params.id],
+      );
       console.log("users", user.rowCount);
       ctx.body = user.rows;
     } catch (error: unknown) {
@@ -40,13 +59,14 @@ class Postgres_controller {
       }
     }
   }
-
-
 
   async delete_artists(ctx: Context) {
     try {
       console.log("get_users func");
-      const user = await db.query('Delete FROM public."Artist" WHERE "ArtistId" = $1',[ctx.params.id]);
+      const user = await this.db.query(
+        'Delete FROM public."Artist" WHERE "ArtistId" = $1',
+        [ctx.params.id],
+      );
       console.log("users", user.rowCount);
       ctx.body = user.rows;
     } catch (error: unknown) {
@@ -55,6 +75,5 @@ class Postgres_controller {
       }
     }
   }
-
 }
 export default new Postgres_controller();

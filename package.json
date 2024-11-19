@@ -149,8 +149,8 @@
     "yocto-queue": "^0.1.0"
   },
   "scripts": {
-    "test": "jest ",
-    "start": "nodemon --exec ts-node main.ts"
+    "test": "NODE_ENV=test jest --detectOpenHandles",
+    "start": "NODE_ENV=start nodemon --exec ts-node main.ts"
   },
   "author": "",
   "license": "ISC",
