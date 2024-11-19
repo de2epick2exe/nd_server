@@ -1,5 +1,5 @@
 name: tests
-on: 
+on:
   push:
     branches: ["test"]
   workflow_dispatch:
@@ -7,5 +7,20 @@ jobs:
   test:
     runs-on: self-hosted
     steps:
-        - name: Echo Test
-          run: echo "Hello, GitHub Actions!"
+      - name: Echo Test
+        run: echo "Hello, GitHub Actions!"
+
+      - name: Print Current Branch
+        run: echo "Current branch is ${{ github.ref }}"
+
+      - name: Get repository code
+      - uses: actions/checkout@v3
+
+      - name: Set Up NodeJS
+      - uses: actions/setup-node@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
