@@ -8,11 +8,14 @@ jobs:
     steps:
         - name: Print Current Branch
           run: echo "Current branch is ${{ github.ref }}"
+          
         - name: Get repository code
         - uses: actions/checkout@v3
 
         - name: Set Up NodeJS
         - uses: actions/setup-node@v3
+          with:
+            node-version: "23.1.0"
         
         - name: Install dependencies
           run: npm install
