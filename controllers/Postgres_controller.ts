@@ -23,20 +23,19 @@ class Postgres_controller {
     if(this.isConnected) return;
     await this.db.connect();
     this.isConnected = true;
-    console.log("connected to db");
+    process.env.NODE_ENV !== "test" &&  console.log(`connected from db`);    
   }
   async disconnect_db() {
     await this.db.end();
     this.isConnected = false;
-
-    console.log("disconnected from db");
+    process.env.NODE_ENV !== "test" &&  console.log(`disconnected from db`);
+    
   }
 
   async get_artists(ctx: Context) {
-    try {
-      console.log("get_users func");
+    try {      
       const users = await this.db.query('SELECT * FROM public."Artist"');
-      console.log("users", users.rowCount);
+      ///console.log("users", users.rowCount);
       ctx.body = users.rows;
     } catch (error: unknown) {
       if (error instanceof Error) {

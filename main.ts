@@ -16,8 +16,7 @@ const start = async () => {
     await Postgres_controller.connect_db();
     return new Promise<any>((resolve) => {
       server = app.listen(8080, () => {
-        process.env.NODE_ENV !== "test" &&
-          console.log(`Server is running on port http://localhost:8080/`);
+        process.env.NODE_ENV !== "test" &&  console.log(`Server is running on port http://localhost:8080/`);
         resolve(server);
       });
     });
