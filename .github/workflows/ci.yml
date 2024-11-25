@@ -13,5 +13,5 @@ jobs:
     needs: tests
     runs-on: self-hosted
     steps:
-      name: "Echo build"
-      run: echo "Build successful"
+     - name: "Echo build"
+       run: echo "Build successful"
