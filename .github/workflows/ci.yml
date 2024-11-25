@@ -9,9 +9,9 @@ jobs:
     with:
       testBranch: "test"
 
-build:
-  needs: tests
-  runs-on: self-hosted
-  steps:
-    name: "Echo build"
-    run: echo "Build successful"
+  build:
+    needs: tests
+    runs-on: self-hosted
+    steps:
+      name: "Echo build"
+      run: echo "Build successful"
