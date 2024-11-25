@@ -1,7 +1,7 @@
-name: CI/CD Pipeline
+name: CI
 on:
   push:
-    branches: ["main"]
+    branches: ["test"]
     workflow_dispatch:
 jobs:
   tests:
