@@ -4,8 +4,7 @@ on:
     branches: ["test"]
   workflow_dispatch:
 jobs:
-  tests:
-    environment: DBSCRT
+  tests:    
     uses: ./.github/workflows/test.yml    
 
   build:
