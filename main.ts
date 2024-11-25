@@ -5,11 +5,7 @@ import { UnknownError } from "http-errors";
 const app = new Koa();
 app.use(router.routes());
 
-/*
-const server = app.listen(8080, () => {
-  console.log(`Server is running on port http://localhost:8080/`);
-});
-*/
+
 let server: any;
 const start = async () => {
   try {
@@ -47,4 +43,4 @@ if (process.env.NODE_ENV !== "test") {
 }
 
 export { app, start, stop };
-//export { app, server};
+

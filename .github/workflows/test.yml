@@ -1,0 +1,16 @@
+name: tests
+on: 
+  push:
+    branches: ["test"]
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: self-hosted
+    steps:
+        - name: Print Current Branch
+          run: echo "Current branch is ${{ github.ref }}"
+          
+        - name: Get repository code
+        - uses: actions/checkout@v3
+
+
