@@ -1,6 +1,11 @@
 name: Main tests
 on:
   workflow_call:
+    inputs:
+      testBranch: # Define the input
+        description: "The branch to test"
+        required: true
+        type: string
 jobs:
   test:
     runs-on: self-hosted
