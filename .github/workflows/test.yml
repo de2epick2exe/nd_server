@@ -1,16 +1,46 @@
-name: tests
-on: 
+name: Main tests
+on:
   push:
     branches: ["test"]
   workflow_dispatch:
 jobs:
   test:
     runs-on: self-hosted
+    environment: DBSCRT
     steps:
-        - name: Print Current Branch
-          run: echo "Current branch is ${{ github.ref }}"
-          
-        - name: Get repository code
-        - uses: actions/checkout@v3
+      - name: Echo Test
+        run: echo "Hello, GitHub Actions!"
 
+      - name: Get repository code
+        uses: actions/checkout@v3
 
+      - name: Set Up NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: "23"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set Environment Variables for .env
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+        run: |
+          echo "DB_NAME=$DB_NAME" >> .env
+          echo "DB_USER=$DB_USER" >> .env
+          echo "DB_PASS=$DB_PASS" >> .env
+          echo "DB_HOST=$DB_HOST" >> .env
+          echo "DB_PORT=$DB_PORT" >> .env
+
+      - name: Run Tests
+        run: npm test
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
