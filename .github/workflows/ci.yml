@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
 jobs:
   tests:
+    environment: DBSCRT
     uses: ./.github/workflows/test.yml    
 
   build:
