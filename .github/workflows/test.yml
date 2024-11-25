@@ -2,10 +2,16 @@ name: Main tests
 on:
   workflow_call:
     inputs:
-      testBranch: # Define the input
+      testBranch: 
         description: "The branch to test"
         required: true
         type: string
+        secrets:
+    DB_NAME: {}
+    DB_USER: {}
+    DB_PASS: {}
+    DB_HOST: {}
+    DB_PORT: {}
 jobs:
   test:
     runs-on: self-hosted
