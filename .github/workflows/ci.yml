@@ -5,7 +5,7 @@ on:
     workflow_dispatch:
 jobs:
   tests:
-    uses: ./github/workflows/test.yml
+    uses: ./.github/workflows/test.yml
     with:
       testBranch: "test"
 
