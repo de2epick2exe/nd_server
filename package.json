@@ -150,7 +150,10 @@
   },
   "scripts": {
     "test": "NODE_ENV=test jest --detectOpenHandles",
-    "start": "NODE_ENV=start nodemon --exec ts-node main.ts"
+    "start": "NODE_ENV=start nodemon --exec ts-node main.ts",
+    "build": "tsc",
+    "start:build": "NODE_ENV=production node dist/main.js",
+    "test:build": "NODE_ENV=test jest --config jest.build.config.js"
   },
   "author": "",
   "license": "ISC",

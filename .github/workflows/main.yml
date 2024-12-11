@@ -4,10 +4,10 @@ on:
     branches: ["main"]
   workflow_dispatch:
 jobs:
-  tests:    
+  tests:
     uses: ./.github/workflows/test.yml
     with:
-      testBranch: "test"    
+      testBranch: "test"
     secrets:
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_USER: ${{ secrets.DB_USER }}
@@ -19,5 +19,8 @@ jobs:
     needs: tests
     runs-on: self-hosted
     steps:
-     - name: "Echo build"
-       run: echo "Build successful"
+      - name: "Echo build STATUS:"
+        run: echo "Build successful"
+
+      - name: "Echo build STATUS:"
+        run: echo "Build successful"
