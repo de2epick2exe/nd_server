@@ -1,23 +1,59 @@
 name: CI
 on:
-  push:
-    branches: ["test"]
-  workflow_dispatch:
-jobs:
-  tests:    
-    uses: ./.github/workflows/test.yml
-    with:
-      testBranch: "test"    
+  workflow_call:
+    inputs:
+      mainBranch: 
+        description: "The branch for CI"
+        required: true
+        type: string
     secrets:
-      DB_NAME: ${{ secrets.DB_NAME }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASS: ${{ secrets.DB_PASS }}
-      DB_HOST: ${{ secrets.DB_HOST }}
-      DB_PORT: ${{ secrets.DB_PORT }}
-
-  build:
-    needs: tests
+      DB_NAME: {}
+      DB_USER: {}
+      DB_PASS: {}
+      DB_HOST: {}
+      DB_PORT: {}
+jobs:
+  test:
     runs-on: self-hosted
+    environment: DBSCRT
     steps:
-     - name: "Echo build"
-       run: echo "Build successful"
+      - name: Echo Test
+        run: echo "Hello, GitHub Actions!"
+
+      - name: Get repository code
+        uses: actions/checkout@v3
+
+      - name: Set Up NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: "23"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+
+      - name: Run Build
+        run: npm run build
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+
+      - name: Run test for build
+        run: npm run test:build
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}

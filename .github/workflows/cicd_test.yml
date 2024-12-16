@@ -1,0 +1,46 @@
+name: Test CI/CD 
+on:
+  push:
+    branches: ["test"]
+  workflow_dispatch:
+jobs:
+  tests:    
+    uses: ./.github/workflows/test.yml
+    with:
+      testBranch: "test"    
+    secrets:
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASS: ${{ secrets.DB_PASS }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+
+  build:
+    needs: tests
+    runs-on: self-hosted
+    steps:
+     - name: "Echo build"
+       run: echo "Build successful"
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+     - name: Execute remote SSH commands 
+       uses: appleboy/ssh-action@v1.2.0 
+       with: 
+        host: ${{ secrets.SH_HOST }}
+        username: ${{ secrets.SH_USER }}
+        key: ${{ secrets.SH_KEYY }}
+        script: |
+         cd ~/actions-runner/_work/nd_server/nd_server/dist
+         pm2 describe nd_serv > /dev/null
+         if [$? -eq 0]; then
+            pm2 restart nd_serv
+         else
+            DB_NAME=${{ secrets.DB_NAME }} \
+            DB_USER=${{ secrets.DB_USER }} \
+            DB_PASS=${{ secrets.DB_PASS }} \
+            DB_HOST=${{ secrets.DB_HOST }} \
+            pm2 start main.js --name "nd_serv"
+         fi

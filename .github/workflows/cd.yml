@@ -1,0 +1,41 @@
+name: CD
+on:
+  workflow_call:
+    inputs:
+      MainBranch: 
+        description: "The Deploy branch"
+        required: true
+        type: string
+    secrets:
+      DB_NAME: {}
+      DB_USER: {}
+      DB_PASS: {}
+      DB_HOST: {}
+      DB_PORT: {}
+jobs:
+  deploy:
+    runs-on: self-hosted
+    environment: DBSCRT
+    steps:
+      - name: Echo Deploy
+        run: echo "Hello, GitHub Actions!"
+
+      - name: Get repository code
+        uses: actions/checkout@v3
+
+      - name: Execute remote SSH commands 
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+        run: |
+          cd ~/actions-runner/_work/nd_server/nd_server/dist/
+          DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASS=$DB_PASS DB_HOST=$DB_HOST DB_PORT=$DB_PORT pm2 start main.js --name "nd-serv" 
+          pm2 save
+
+      
+
+
