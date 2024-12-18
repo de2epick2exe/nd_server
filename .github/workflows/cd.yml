@@ -15,26 +15,29 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-    environment: DBSCRT
+    secrets:
+      SH_HOST: ${{ secrets.SH_HOST }}
+      SH_USER: ${{ secrets.SH_USER }}
+      SH_KEYY: ${{ secrets.SH_KEYY }}
     steps:
-      - name: Echo Deploy
-        run: echo "Hello, GitHub Actions!"
-
-      - name: Get repository code
-        uses: actions/checkout@v3
-
-      - name: Execute remote SSH commands 
+      - name: Execute remote SSH commands
         uses: appleboy/ssh-action@v1.2.0
-        env:
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASS: ${{ secrets.DB_PASS }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-        run: |
-          cd ~/actions-runner/_work/nd_server/nd_server/dist/
-          DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASS=$DB_PASS DB_HOST=$DB_HOST DB_PORT=$DB_PORT pm2 start main.js --name "nd-serv" 
-          pm2 save
+        with:
+          host: ${{ secrets.SH_HOST }}
+          username: ${{ secrets.SH_USER }}
+          key: ${{ secrets.SH_KEYY }}
+          script: |
+            cd ~/actions-runner/_work/nd_server/nd_server/dist
+            pm2 describe nd_serv > /dev/null
+            if [ $? -eq 0 ]; then
+               pm2 restart nd_serv
+            else
+               DB_NAME=${{ secrets.DB_NAME }} \
+               DB_USER=${{ secrets.DB_USER }} \
+               DB_PASS=${{ secrets.DB_PASS }} \
+               DB_HOST=${{ secrets.DB_HOST }} \
+               pm2 start main.js --name "nd_serv"
+            fi
 
       
 
