@@ -17,6 +17,7 @@ jobs:
       SH_HOST: ${{ secrets.SH_HOST }}
       SH_USER: ${{ secrets.SH_USER }}
       SH_KEYY: ${{ secrets.SH_KEYY }}
+      SH_PASS: ${{ secrets.SH_PASS }}
 
   build:
     needs: tests
@@ -35,6 +36,7 @@ jobs:
           host: ${{ secrets.SH_HOST }}
           username: ${{ secrets.SH_USER }}
           key: ${{ secrets.SH_KEYY }}
+          passphrase : ${{ secrests.SH_PASS }}         
           script: |
             cd ~/actions-runner/_work/nd_server/nd_server/dist
             pm2 describe nd_serv > /dev/null

@@ -15,6 +15,7 @@ on:
       SH_HOST: {}
       SH_USER: {}
       SH_KEYY: {}
+      SH_PASS: {}
 jobs:
   test:
     runs-on: self-hosted
