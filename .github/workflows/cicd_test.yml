@@ -14,6 +14,9 @@ jobs:
       DB_PASS: ${{ secrets.DB_PASS }}
       DB_HOST: ${{ secrets.DB_HOST }}
       DB_PORT: ${{ secrets.DB_PORT }}
+      SH_HOST: ${{ secrets.SH_HOST }}
+      SH_USER: ${{ secrets.SH_USER }}
+      SH_KEYY: ${{ secrets.SH_KEYY }}
 
   build:
     needs: tests
@@ -24,11 +27,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: self-hosted
-    secrets:
-      SH_HOST: ${{ secrets.SH_HOST }}
-      SH_USER: ${{ secrets.SH_USER }}
-      SH_KEYY: ${{ secrets.SH_KEYY }}
+    runs-on: self-hosted    
     steps:
       - name: Execute remote SSH commands
         uses: appleboy/ssh-action@v1.2.0
