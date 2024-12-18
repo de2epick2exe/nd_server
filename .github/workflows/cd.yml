@@ -24,6 +24,7 @@ jobs:
         with:
           host: ${{ secrets.SH_HOST }}
           username: ${{ secrets.SH_USER }}
+          key: ${{ secrets.SH_KEYY }}          
           password: ${{ secrets.SH_PASS }} 
           script: |
             cd ~/actions-runner/_work/nd_server/nd_server/dist
