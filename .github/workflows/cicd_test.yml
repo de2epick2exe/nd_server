@@ -35,7 +35,7 @@ jobs:
         script: |
          cd ~/actions-runner/_work/nd_server/nd_server/dist
          pm2 describe nd_serv > /dev/null
-         if [$? -eq 0]; then
+         if [ $? -eq 0 ]; then
             pm2 restart nd_serv
          else
             DB_NAME=${{ secrets.DB_NAME }} \
