@@ -3,7 +3,7 @@ import { router } from "./routers/router";
 import Postgres_controller from "./controllers/Postgres_controller";
 import { UnknownError } from "http-errors";
 const app = new Koa();
-app.use(router.routes());
+app.use(router.routes()); 
 
 
 let server: any;
